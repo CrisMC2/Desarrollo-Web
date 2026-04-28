@@ -1,0 +1,215 @@
+/* Reseteo básico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background-color: #ffffff;
+}
+
+.header-container {
+    margin-bottom: 40px;
+    text-align: center;
+}
+
+/* Contenedor principal usando Flexbox */
+.card-container {
+    display: flex;
+    gap: 30px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/* Estructura de la Card con Perspectiva 3D */
+.card {
+    width: max(280px, 30vw);
+    height: max(320px, 40vh);
+    perspective: 1000px; /* Otorga profundidad a la animación 3D */
+    cursor: pointer;
+}
+
+.card-inner {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transition: transform 0.8s ease;
+    transform-style: preserve-3d;
+}
+
+/* Animación Hover: Giro de 180 grados incluyendo eje vertical/horizontal */
+.card:hover .card-inner {
+    /* Combinamos rotación en Y y un ligero toque en X para cumplir con el giro de ejes */
+    transform: rotateY(180deg) rotateX(5deg);
+}
+
+/* Caras de la Card */
+.card-front, .card-back {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    backface-visibility: hidden; /* Oculta la parte trasera cuando no está frente a la cámara */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: max(30px, 2vw);
+    text-align: center;
+    color: white;
+    border-radius: max(8px, 1vw);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}
+
+.card-back {
+    transform: rotateY(180deg);
+}
+
+/* Tipografía y elementos internos */
+.card-front h2 {
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+
+.card-front p {
+    font-size: 0.9rem;
+    margin-bottom: 30px;
+    line-height: 1.4;
+    opacity: 0.9;
+}
+
+.icon-arrow {
+    width: 40px;
+    height: 40px;
+    background-color: white;
+    color: black;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+/* Botón de la cara posterior */
+.btn-learn {
+    display: inline-block;
+    padding: 10px 20px;
+    border: 1px solid white;
+    color: white;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+    transition: background 0.3s, color 0.3s;
+}
+
+.btn-learn:hover {
+    background-color: white;
+    color: #333;
+}
+
+/* Fondos simulados con gradientes */
+.card-bg-1 {
+    background: linear-gradient(rgba(63, 0, 0, 0.85), rgba(255, 0, 0, 0.653)), 
+                url('src/Page01img.jpg');
+    
+    background-size: cover;      /* Hace que la imagen cubra toda la tarjeta sin deformarse */
+    background-position: center; /* Centra la imagen en el contenedor */
+    background-repeat: no-repeat; /* Evita que la imagen se repita si es más pequeña que el contenedor */
+}
+
+.card-bg-2 {
+    background: linear-gradient(rgba(0, 32, 63, 0.85), rgba(0, 87, 157, 0.85)), 
+                url('src/Page02img.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.card-bg-3 {
+    background: linear-gradient(rgba(10, 63, 0, 0.85), rgba(70, 160, 1, 0.85)), 
+                url('src/Page03img.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+/* =========================================
+   MEDIA QUERIES (Diseño Responsivo)
+   ========================================= */
+
+/* 1. Pantallas Extra Grandes (Mayor a 1200px) */
+@media (min-width: 1201px) {
+    .card-container {
+        gap: 50px; /* Mayor separación entre las tarjetas */
+    }
+    .card {
+        width: 300px;
+        height: 340px;
+    }
+}
+
+/* 2. Pantallas Grandes (Menor a 1200px) */
+@media (max-width: 1200px) {
+    .card-container {
+        gap: 30px;
+    }
+    .card {
+        width: 280px;
+        height: 320px;
+    }
+}
+
+/* 3. Pantallas Medianas / Tablets (Menor a 900px) */
+@media (max-width: 900px) {
+    .card-container {
+        gap: 20px;
+    }
+    .card {
+        width: 240px; /* Reducimos el tamaño para que quepan mejor */
+        height: 280px;
+    }
+    .header-container h1 {
+        font-size: 1.8rem;
+    }
+}
+
+/* 4. Pantallas Pequeñas / Celulares (Menor a 480px) */
+@media (max-width: 480px) {
+    body {
+        padding: 20px; /* Evita que el contenido se pegue a los bordes de la pantalla */
+    }
+    .card-container {
+        flex-direction: column;
+        align-items: center;
+        width: 100%; /* Asegura que el contenedor use todo el espacio */
+        gap: 30px;
+    }
+    .card {
+        width: 100%; /* La tarjeta toma el ancho disponible */
+        max-width: 320px; /* Pero no crece más de 320px para mantener proporción */
+        height: 320px;
+    }
+    
+    /* FIX PRINCIPAL: Reducimos el espacio interno (padding) en móviles */
+    .card-front, .card-back {
+        padding: 15px; /* Antes estaba en 30px, le damos más respiro al texto */
+    }
+
+    /* Ajustamos los textos para que encajen mejor */
+    .card-front h2 {
+        font-size: 1.5rem; 
+    }
+    .card-front p {
+        font-size: 0.85rem;
+        margin-bottom: 20px;
+    }
+}
