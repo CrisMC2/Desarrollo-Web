@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Page 01 – Form</title>
+  <link rel="stylesheet" href="page01.css" />
+</head>
+<body>
+
+  <div class="window">
+
+    <!-- ── Header with 4 SVG icons ── -->
+    <div class="window-header">
+      <div class="header-icons">
+
+        <!-- Sun / brightness -->
+        <button class="icon-btn" title="Theme" aria-label="Toggle theme">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+               stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"/>
+            <line x1="12" y1="1"  x2="12" y2="3"/>
+            <line x1="12" y1="21" x2="12" y2="23"/>
+            <line x1="4.22" y1="4.22"  x2="5.64" y2="5.64"/>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+            <line x1="1" y1="12" x2="3"  y2="12"/>
+            <line x1="21" y1="12" x2="23" y2="12"/>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+            <line x1="18.36" y1="5.64"  x2="19.78" y2="4.22"/>
+          </svg>
+        </button>
+
+        <!-- Shield / security -->
+        <button class="icon-btn" title="Security" aria-label="Security">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+               stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          </svg>
+        </button>
+
+        <!-- Copy / clipboard -->
+        <button class="icon-btn" title="Copy" aria-label="Copy">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+               stroke-linecap="round" stroke-linejoin="round">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+          </svg>
+        </button>
+
+        <!-- Code / brackets -->
+        <button class="icon-btn" title="Code" aria-label="View code">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+               stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="16 18 22 12 16 6"/>
+            <polyline points="8 6 2 12 8 18"/>
+          </svg>
+        </button>
+
+      </div>
+    </div>
+
+    <!-- ── Form body ── -->
+    <div class="window-body">
+      <form id="mainForm" novalidate>
+
+        <!-- Text field 1 – Name -->
+        <div class="field-group">
+          <input type="text" id="name" name="name" placeholder=" " autocomplete="off" />
+          <label for="name">Name</label>
+          <span class="underline"></span>
+        </div>
+
+        <!-- Text field 2 – E-mail -->
+        <div class="field-group">
+          <input type="email" id="email" name="email" placeholder=" " autocomplete="off" />
+          <label for="email">E-mail</label>
+          <span class="underline"></span>
+        </div>
+
+        <!-- Text field 3 – Message -->
+        <div class="field-group">
+          <input type="text" id="message" name="message" placeholder=" " autocomplete="off" />
+          <label for="message">Message</label>
+          <span class="underline"></span>
+        </div>
+
+        <!-- Image drag-and-drop field -->
+        <div class="image-field" id="imageField" tabindex="0"
+             role="button" aria-label="Drop an image file here">
+
+          <!-- Upload SVG logo (shown when no file is dropped) -->
+          <svg class="upload-icon" viewBox="0 0 64 64" fill="none"
+               stroke="currentColor" stroke-width="2.5"
+               stroke-linecap="round" stroke-linejoin="round">
+            <rect x="4" y="4" width="56" height="56" rx="8"/>
+            <polyline points="22 38 32 28 42 38"/>
+            <line x1="32" y1="28" x2="32" y2="48"/>
+            <line x1="20" y1="20" x2="44" y2="20"/>
+          </svg>
+
+          <span class="file-path" id="filePath">Drag &amp; drop an image here</span>
+        </div>
+
+        <!-- Checkbox -->
+        <div class="checkbox-group">
+          <label class="checkbox-label">
+            <input type="checkbox" id="agree" name="agree" />
+            <span class="custom-checkbox"></span>
+            <span class="checkbox-text">Do you agree?</span>
+          </label>
+        </div>
+
+        <!-- Buttons -->
+        <div class="button-group">
+          <button type="submit" class="btn btn-submit">SUBMIT</button>
+          <button type="reset"  class="btn btn-clear"  id="clearBtn">CLEAR</button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+  <script>
+    /* ── Floating-label fallback (for browsers that don't support :placeholder-shown) ── */
+    document.querySelectorAll('.field-group input').forEach(input => {
+      const label = input.nextElementSibling;
+      const sync  = () => input.value ? label.classList.add('up') : label.classList.remove('up');
+      input.addEventListener('focus', () => label.classList.add('up'));
+      input.addEventListener('blur',  sync);
+      input.addEventListener('input', sync);
+    });
+
+    /* ── Drag-and-drop image field ── */
+    const zone     = document.getElementById('imageField');
+    const filePath = document.getElementById('filePath');
+    const icon     = zone.querySelector('.upload-icon');
+
+    zone.addEventListener('dragenter', e => {
+      e.preventDefault();
+      zone.classList.add('drag-over');
+    });
+
+    zone.addEventListener('dragover', e => {
+      e.preventDefault();
+    });
+
+    /* Solo quita drag-over cuando el cursor sale FUERA del contenedor */
+    zone.addEventListener('dragleave', e => {
+      if (!zone.contains(e.relatedTarget)) {
+        zone.classList.remove('drag-over');
+      }
+    });
+
+    zone.addEventListener('drop', e => {
+      e.preventDefault();
+      zone.classList.remove('drag-over');
+      const file = e.dataTransfer.files[0];
+      if (file) {
+        /* Los navegadores no exponen la ruta completa por seguridad; se muestra el nombre */
+        filePath.textContent = file.name;
+        icon.classList.add('hidden');
+        zone.classList.add('has-file');
+      }
+    });
+
+    /* ── CLEAR button resets the image field too ── */
+    document.getElementById('clearBtn').addEventListener('click', () => {
+      filePath.textContent = 'Drag & drop an image here';
+      icon.classList.remove('hidden');
+      zone.classList.remove('has-file');
+    });
+  </script>
+
+</body>
+</html>
