@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Practica 02</title>
+    <link rel="stylesheet" href="page02.css">
+</head>
+<body>
+    <main class="page">
+        <section class="exercise">
+            <div class="settings-window">
+                <div class="window-bar">
+                    <div></div>
+                    <div class="window-icons" aria-label="Iconos de ventana">
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M12 4V2m0 20v-2m5.66-13.66 1.42-1.42M4.92 19.08l1.42-1.42M20 12h2M2 12h2m15.08 7.08-1.42-1.42M6.34 6.34 4.92 4.92"/>
+                            <circle cx="12" cy="12" r="4"/>
+                        </svg>
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="m4 6 8 12 8-12-8 4-8-4Z"/>
+                            <circle cx="12" cy="10" r="2"/>
+                        </svg>
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <rect x="8" y="7" width="10" height="12" rx="1"/>
+                            <path d="M6 15H5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h9a1 1 0 0 1 1 1v1"/>
+                        </svg>
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="m9 18-6-6 6-6m6 0 6 6-6 6"/>
+                        </svg>
+                    </div>
+                </div>
+
+                <div class="window-content">
+                    <label class="control-row">
+                        <span class="control-title">Media volume</span>
+                        <span class="control-line">
+                            <svg class="side-icon" viewBox="0 0 24 24" aria-hidden="true">
+                                <path d="M5 9v6h4l5 4V5L9 9H5Z"/>
+                                <path d="M17 9a5 5 0 0 1 0 6m2.5-9.5a9 9 0 0 1 0 13"/>
+                            </svg>
+                            <input type="range" min="0" max="100" value="4">
+                        </span>
+                    </label>
+
+                    <label class="control-row with-end-icon">
+                        <span class="control-title">Alarm volume</span>
+                        <span class="control-line">
+                            <input type="range" min="0" max="100" value="0">
+                            <svg class="side-icon" viewBox="0 0 24 24" aria-hidden="true">
+                                <circle cx="12" cy="13" r="7"/>
+                                <path d="M12 9v5l3 2M8 2 4 6m12-4 4 4"/>
+                            </svg>
+                        </span>
+                    </label>
+
+                    <label class="control-row">
+                        <span class="control-title">Icon click callback</span>
+                        <span class="control-line">
+                            <svg class="side-icon" viewBox="0 0 24 24" aria-hidden="true">
+                                <circle cx="10.5" cy="10.5" r="5.5"/>
+                                <path d="m15 15 5 5M7 10.5h7"/>
+                            </svg>
+                            <input type="range" min="0" max="100" value="4">
+                            <svg class="side-icon" viewBox="0 0 24 24" aria-hidden="true">
+                                <circle cx="10.5" cy="10.5" r="5.5"/>
+                                <path d="m15 15 5 5M10.5 7v7M7 10.5h7"/>
+                            </svg>
+                        </span>
+                    </label>
+                </div>
+            </div>
+        </section>
+
+        <section class="exercise">
+            <div class="rgb-card">
+                <div class="color-preview" id="colorPreview"></div>
+
+                <div class="rgb-controls">
+                    <label class="rgb-row">
+                        <span>R</span>
+                        <input class="rgb-slider" id="redRange" type="range" min="0" max="255" value="80">
+                        <input class="rgb-number" id="redNumber" type="number" min="0" max="255" value="80">
+                    </label>
+
+                    <label class="rgb-row">
+                        <span>G</span>
+                        <input class="rgb-slider" id="greenRange" type="range" min="0" max="255" value="165">
+                        <input class="rgb-number" id="greenNumber" type="number" min="0" max="255" value="165">
+                    </label>
+
+                    <label class="rgb-row">
+                        <span>B</span>
+                        <input class="rgb-slider" id="blueRange" type="range" min="0" max="255" value="92">
+                        <input class="rgb-number" id="blueNumber" type="number" min="0" max="255" value="92">
+                    </label>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        const channels = [
+            {
+                range: document.getElementById('redRange'),
+                number: document.getElementById('redNumber')
+            },
+            {
+                range: document.getElementById('greenRange'),
+                number: document.getElementById('greenNumber')
+            },
+            {
+                range: document.getElementById('blueRange'),
+                number: document.getElementById('blueNumber')
+            }
+        ];
+
+        const colorPreview = document.getElementById('colorPreview');
+
+        function limitColorValue(value) {
+            const numericValue = Number(value);
+
+            if (Number.isNaN(numericValue)) {
+                return 0;
+            }
+
+            return Math.min(255, Math.max(0, numericValue));
+        }
+
+        function updateColor() {
+            const red = limitColorValue(channels[0].number.value);
+            const green = limitColorValue(channels[1].number.value);
+            const blue = limitColorValue(channels[2].number.value);
+
+            colorPreview.style.backgroundColor = `rgb(${red}, ${green}, ${blue})`;
+        }
+
+        channels.forEach(({ range, number }) => {
+            range.addEventListener('input', () => {
+                number.value = range.value;
+                updateColor();
+            });
+
+            number.addEventListener('input', () => {
+                const value = limitColorValue(number.value);
+                number.value = value;
+                range.value = value;
+                updateColor();
+            });
+        });
+
+        updateColor();
+    </script>
+</body>
+</html>
